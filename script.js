@@ -2,52 +2,81 @@ let container = document.querySelector('.container');
 const clear = document.querySelector('.clear');
 const newGrid = document.querySelector('.new-grid');
 
-let gridNumber = 16;
-createBoard(gridCalc(gridNumber));
+let rowNumber = 16;
+createBoard(rowNumber);
 
 clear.addEventListener('click', () => clearGrid());
-newGrid.addEventListener('click', () => {
-    deleteBoard(); 
-    createBoard(gridCalc(prompt('Number of Rows?')))});
+newGrid.addEventListener('click', () => checkNum());
 
-function changeColor(box){
-    box.setAttribute('style', 'background-color: black')
+function changeColor(){
+    this.style.backgroundColor = randomRGB();
+    console.log(randomRGB());
 };
 
 function clearGrid(){
     let gridBoxes = document.querySelectorAll('.box')
-    gridBoxes.forEach(box => box.setAttribute('style', 'background-color: white'))
+    gridBoxes.forEach(box => box.classList.remove('etched'))
 };
 
-function gridCalc(num){
+function checkNum(){
+    let num = prompt("Number of Rows?");
     if(num <= 0 || isNaN(num)){
         alert("Please Enter a Positive Number");
         return;
     }
-        num = num*num;
-        return num;
+
+    if (num >50){
+        alert("Please Enter a Number lower than 51");
+         return;
+    }
+    deleteBoard();    
+    createBoard(num);
         
     };
 
-    function createBoard(gridNumber){
+    function createBoard(rowNumber){
+        let gridNumber = rowNumber * rowNumber;
         for (let i = 0; i < gridNumber; i++) {
             let gridBox = document.createElement('div');
             gridBox.setAttribute('class', 'box')
-            gridBox.style.height = container.clientHeight * (1/gridNumber);
-            gridBox.style.flexBasis = container.clientHeight * (1/gridNumber);
-            console.log(gridBox.style.flexBasis)
+            gridBox.style.height = (container.clientHeight * (1/rowNumber)) + 'px';
+            gridBox.style.flexBasis = (container.clientHeight * (1/rowNumber)) + 'px';
             container.appendChild(gridBox);
             }
+        
+        
+
         let gridBoxes = container.childNodes;
-        gridBoxes.forEach(box => box.addEventListener('mouseover', () => changeColor(box)));
+        gridBoxes.forEach(box => box.addEventListener('mouseover', changeColor, {once: true}));
+        gridBoxes.forEach(box => box.addEventListener('mouseover', increaseShade));
         }
 
         function deleteBoard(){
             while (container.firstChild){
                 container.removeChild(container.firstChild);
-            }
-        }
+        }};
 
+       function randomRGB() {
+            let r = Math.floor(Math.random() * 255);
+            let g = Math.floor(Math.random() * 255);
+            let b = Math.floor(Math.random() * 255);
+            let a = 0.1;
+            return `rgba(${r},${g},${b},${a})`;
+        
+        };
+
+        function increaseShade(){
+            let color = this.style.backgroundColor;
+            let start = color.length - 3;
+            let end = color.length - 1;
+            let shade = color.slice(start,end);
+            if (shade === '.0') return;
+            let increase = Number(shade) + .1;
+            color = color.substring(0, start - 1) + increase + ')';
+            console.log(increase);
+            console.log(color);
+            this.style.backgroundColor = color;
+        };
 
 
     
