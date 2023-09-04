@@ -10,12 +10,13 @@ newGrid.addEventListener('click', () => checkNum());
 
 function changeColor(){
     this.style.backgroundColor = randomRGB();
-    console.log(randomRGB());
+    
 };
 
 function clearGrid(){
     let gridBoxes = document.querySelectorAll('.box')
-    gridBoxes.forEach(box => box.classList.remove('etched'))
+    gridBoxes.forEach(box => box.style.backgroundColor = 'white');
+    gridBoxes.forEach(box => box.addEventListener('mouseover', changeColor, {once: true}));
 };
 
 function checkNum(){
@@ -70,12 +71,14 @@ function checkNum(){
             let start = color.length - 3;
             let end = color.length - 1;
             let shade = color.slice(start,end);
-            if (shade === '.0') return;
+            console.log(shade);
+            if (shade === ".9") return;
             let increase = Number(shade) + .1;
             color = color.substring(0, start - 1) + increase + ')';
-            console.log(increase);
+            //console.log(increase);
             console.log(color);
             this.style.backgroundColor = color;
+
         };
 
 
